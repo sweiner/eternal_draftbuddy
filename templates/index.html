@@ -16,8 +16,8 @@
             <div class="autocomplete" style="width:300px;">
                 {{ form.card }}
             </div>
-            <input type="submit" value="Submit" id="Submit_But">
-            <input type="submit" value="Clear Table" id="Clear_But">
+            <input type="submit" value="Submit" id="submitButton">
+            <input type="submit" value="Clear Table" id="clearButton">
         </form>
 
         <table id="card_table">
@@ -216,6 +216,14 @@
                 document.addEventListener("click", function (e) {
                     closeAllLists(e.target);
                 });
+
+                document.addEventListener("keypress", function (e){
+                    if (e.keyCode == 27) {
+                        /* If escape is pressed, clear the page */
+                        e.preventDefault();
+                        document.getElementById("searchForm").submit();
+                    }
+                });
             }
 
             function submitSearch(button) {
@@ -226,7 +234,8 @@
             }
 
             autocomplete(document.getElementById("searchTextbox"));
-            submitSearch(document.getElementById("Submit_But"))
+            submitSearch(document.getElementById("submitButton"));
+            document.getElementById("searchTextbox").focus();
 
         </script>
     </body>

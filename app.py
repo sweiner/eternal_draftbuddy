@@ -52,4 +52,4 @@ def draft_tierlist():
     return render_template('index.html',form=form, tier_info=tier_info)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, port=80)

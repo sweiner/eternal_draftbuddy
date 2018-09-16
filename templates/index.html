@@ -153,9 +153,10 @@
                     var x = document.getElementById(this.id + "autocomplete-list");
                     var y = document.getElementsByClassName("autocomplete-items");
                     if (x) x = x.getElementsByTagName("div");
-                    if (e.keyCode == 40) {
-                        /*If the arrow DOWN key is pressed,
+                    if (e.keyCode == 40 || e.keyCode == 9) {
+                        /*If the arrow DOWN key or TAB is pressed,
                         increase the currentFocus variable:*/
+                        e.preventDefault();
                         currentFocus++;
                         /*and and make the current item more visible:*/
                         addActive(x);

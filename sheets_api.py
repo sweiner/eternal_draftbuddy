@@ -15,7 +15,7 @@ HEADER_RANGE = 'Tabulated Summary+Thoughts!A2:K2'
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 try:
-    if os.environ['PRODUCTION'] == True:
+    if os.environ['PRODUCTION'] == "TRUE":
         TOKEN_PATH = os.path.normpath('/home/atraeus/eternal_draftbuddy/token.json')
         CRED_PATH = os.path.normpath('/home/atraeus/eternal_draftbuddy/credentials.json')
     else:

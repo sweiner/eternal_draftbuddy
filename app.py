@@ -17,7 +17,7 @@ def get_tier_list():
 
     # Adjust Header Comment Keys
     for i in range(7,11):
-        header_list[0][i]+='-comment'
+        header_list[0][i]+='_comment'
 
     # Remove Header information
     tier_list = tier_list[2:]
@@ -46,14 +46,9 @@ app.config['SECRET_KEY'] = 'FDFSGTRJNYDT5463GFDSW32FFVDFFMNHFMUUFFF4577'
 class SearchForm(FlaskForm):
     card = StringField('Card', id='searchTextbox', render_kw={"placeholder":"Card Name", "class":"form-control"})
 
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/")
 def draft_tierlist():
     form = SearchForm()
-
-    if request.method == 'POST':
-        card = request.form['card']
-        return render_template('index.html',form=form, tier_info=tier_info, card=card)
-
     return render_template('index.html',form=form, tier_info=tier_info)
 
 if __name__ == '__main__':

@@ -11,14 +11,17 @@
         <h1>
             Eternal Draft Tier Search
         </h1>
-        <form id="searchForm" autocomplete="off" method="POST" action="{{ url_for('draft_tierlist') }}">
+        <form id="searchForm" autocomplete="off">
             {{ form.csrf_token }}
             <div class="autocomplete" style="width:300px;">
                 {{ form.card }}
             </div>
+            <input type="submit" value="Submit" id="Submit_But">
+            <input type="submit" value="Clear Table" id="Clear_But">
         </form>
 
         <table id="card_table">
+            <thead>
             <tr>
                 <th>Card</th>
                 <th>Average</th>
@@ -27,6 +30,8 @@
                 <th>Isomorphic</th>
                 <th>Mgallop</th>
             </tr>
+            </thead>
+            <tbody id="card_table_body"></tbody>
         </table>
 
         <script type="text/javascript">
@@ -46,8 +51,48 @@
             var fuse = new Fuse(list, options); // "list" is the item array
 
             function populateCardInfo(card) {
+                // Lookup card
+                if (card !== undefined) {
+                    var result = fuse.search(card);
+                    var table = document.getElementById("card_table_body")
 
-            }
+                    var row = document.createElement("tr");
+                    var cell1 = document.createElement("td");
+                    var cell2 = document.createElement("td");
+                    var cell3 = document.createElement("td");
+                    var cell4 = document.createElement("td");
+                    var cell5 = document.createElement("td");
+                    var cell6 = document.createElement("td");
+
+                    var cell1text = document.createTextNode("");
+                    var cell2text = document.createTextNode("");
+                    var cell3text = document.createTextNode("");
+                    var cell4text = document.createTextNode("");
+                    var cell5text = document.createTextNode("");
+                    var cell6text = document.createTextNode("");
+
+                    if (result[0].Card !== undefined){ cell1text.nodeValue = result[0].Card; }
+                    if (result[0].Average !== undefined) { cell2text.nodeValue = result[0].Average; }
+                    if (result[0].Drifter_comment !== undefined) { cell3text.nodeValue = result[0].Drifter_comment; }
+                    if (result[0].Flash_comment !== undefined) { cell4text.nodeValue = result[0].Flash_comment; }
+                    if (result[0].Isomorphic_comment !== undefined) { cell5text.nodeValue = result[0].Isomorphic_comment; }
+                    if (result[0].Mgallop_comment !== undefined) { cell6text.nodeValue = result[0].Mgallop_comment; }
+
+                    cell1.appendChild(cell1text);
+                    cell2.appendChild(cell2text);
+                    cell3.appendChild(cell3text);
+                    cell4.appendChild(cell4text);
+                    cell5.appendChild(cell5text);
+                    cell6.appendChild(cell6text);
+                    row.appendChild(cell1);
+                    row.appendChild(cell2);
+                    row.appendChild(cell3);
+                    row.appendChild(cell4);
+                    row.appendChild(cell5);
+                    row.appendChild(cell6);
+                    table.appendChild(row);
+                }
+        }
 
             function autocomplete(inp) {
                 /*the autocomplete function takes two arguments,
@@ -120,13 +165,16 @@
                         addActive(x);
                     } else if (e.keyCode == 13) {
                             /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                            e.preventDefault();
                             if (y.length > 0) {
-                                e.preventDefault();
                                 if (currentFocus > -1) {
-                                /*and simulate a click on the "active" item:*/
-                                if (x) x[currentFocus].click();
+                                    /*and simulate a click on the "active" item:*/
+                                    if (x) x[currentFocus].click();
+                                }
                             }
-                        }
+                            else {
+                                populateCardInfo(document.getElementById("searchTextbox").value);
+                            }
                     }
                 });
                 function addActive(x) {
@@ -161,34 +209,26 @@
                 });
             }
 
-            autocomplete(document.getElementById("searchTextbox"));
+            function clearTable(button) {
+                button.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    var old_tbody = document.getElementById("card_table_body");
+                    var new_tbody = document.createElement('tbody');
+                    old_tbody.parentNode.replaceChild(new_tbody, old_tbody)
 
-            if ("{{ card  }}" !== "") {
-                // Lookup card
-                var result = fuse.search("{{ card }}");
-                var table = document.getElementById("card_table")
-
-                var row = document.createElement("tr");
-                var cell1 = document.createElement("td");
-                var cell2 = document.createElement("td");
-                var cell3 = document.createElement("td");
-                var cell4 = document.createElement("td");
-                var cell5 = document.createElement("td");
-                var cell6 = document.createElement("td");
-
-                var cell1text = document.createTextNode(result[0].Card)
-                var cell2text = document.createTextNode(result[0].Average)
-
-                cell1.appendChild(cell1text);
-                cell2.appendChild(cell2text);
-                row.appendChild(cell1);
-                row.appendChild(cell2);
-                row.appendChild(cell3);
-                row.appendChild(cell4);
-                row.appendChild(cell5);
-                row.appendChild(cell6);
-                table.appendChild(row);
+                });
             }
+
+            function submitSearch(button) {
+                button.addEventListener("click", function(e){
+                    e.preventDefault();
+                    populateCardInfo(document.getElementById("searchTextbox").value);
+                });
+            }
+
+            autocomplete(document.getElementById("searchTextbox"));
+            submitSearch(document.getElementById("Submit_But"))
+
         </script>
     </body>
 </html>

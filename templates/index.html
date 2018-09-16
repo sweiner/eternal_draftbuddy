@@ -137,7 +137,9 @@
                         /*execute a function when someone clicks on the item value (DIV element):*/
                         b.addEventListener("click", function(e) {
                             /*insert the value for the autocomplete text field:*/
-                            inp.value = this.getElementsByTagName("input")[0].value;
+                            populateCardInfo(this.getElementsByTagName("input")[0].value);
+                            document.getElementById("searchTextbox").value = "";
+                            //inp.value = this.getElementsByTagName("input")[0].value;
                             /*close the list of autocompleted values,
                             (or any other open lists of autocompleted values:*/
                             closeAllLists();
@@ -171,9 +173,15 @@
                                     /*and simulate a click on the "active" item:*/
                                     if (x) x[currentFocus].click();
                                 }
+                                else {
+                                    currentFocus++;
+                                    /*and and make the current item more visible:*/
+                                    addActive(x);                                    
+                                }
                             }
                             else {
                                 populateCardInfo(document.getElementById("searchTextbox").value);
+                                document.getElementById("searchTextbox").value = "";
                             }
                     }
                 });
@@ -206,16 +214,6 @@
                 /*execute a function when someone clicks in the document:*/
                 document.addEventListener("click", function (e) {
                     closeAllLists(e.target);
-                });
-            }
-
-            function clearTable(button) {
-                button.addEventListener("click", function(e) {
-                    e.preventDefault();
-                    var old_tbody = document.getElementById("card_table_body");
-                    var new_tbody = document.createElement('tbody');
-                    old_tbody.parentNode.replaceChild(new_tbody, old_tbody)
-
                 });
             }
 
